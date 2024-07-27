@@ -8,7 +8,7 @@
 		importance: string;
 	};
 
-	class ShallowHelper {
+	class NonReactiveObjectGenerator {
 		constructor(data: unknown) {
 			Object.assign(this, data);
 		}
@@ -19,12 +19,12 @@
 		set value(newValue: T[]);
 	};
 
-	function clone<T>(data: T): T {
-		return new ShallowHelper(data) as T;
+	function cloneNonReactive<T>(data: T): T {
+		return new NonReactiveObjectGenerator(data) as T;
 	}
 
 	function shallowObservable<T>(data: T[]): ReactivePacket<T[]> {
-		let result = $state(data.map(t => new ShallowHelper(t) as T));
+		let result = $state(data.map(t => new NonReactiveObjectGenerator(t) as T));
 		return {
 			get value() {
 				return result;
@@ -76,7 +76,7 @@
 				<button
 					onclick={() => {
 						t.importance += 'X';
-						tasks.value[idx] = clone(t);
+						tasks.value[idx] = cloneNonReactive(t);
 					}}
 					class="border p-2">Update importance</button
 				>
