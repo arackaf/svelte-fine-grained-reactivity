@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { getCounter } from '$lib';
+
 	var tasks = [
 		{ id: 1, title: 'Task 1', assigned: 'Adam', importance: 'Low' },
 		{ id: 2, title: 'Task 2', assigned: 'Adam', importance: 'Medium' },
@@ -17,6 +19,24 @@
 	$: numberOfTasks = tasks.length;
 </script>
 
-<h1>Number of tasks {numberOfTasks}</h1>
+<h1 class="mb-5">Number of tasks {numberOfTasks}</h1>
 
-{#each tasks as t}{/each}
+<div class="flex flex-col gap-3">
+	{#each tasks as t}
+		<div class="flex flex-row items-center gap-9">
+			<span>{t.id + getCounter()}</span>
+			<div class="flex flex-row items-center gap-2">
+				<span>{t.title + getCounter()}</span>
+				<button on:click={() => (t.title += 'X')} class="border p-2">Update title</button>
+			</div>
+			<div class="flex flex-row items-center gap-2">
+				<span>{t.assigned + getCounter()}</span>
+				<button on:click={() => (t.assigned += 'X')} class="border p-2">Update assigned</button>
+			</div>
+			<div class="flex flex-row items-center gap-2">
+				<span>{t.importance + getCounter()}</span>
+				<button on:click={() => (t.importance += 'X')} class="border p-2">Update importance</button>
+			</div>
+		</div>
+	{/each}
+</div>
