@@ -1,5 +1,1 @@
-<script>
-	import Junk from './Junk.svelte';
-</script>
-
-<Junk />
+<h1>Hello World</h1>
