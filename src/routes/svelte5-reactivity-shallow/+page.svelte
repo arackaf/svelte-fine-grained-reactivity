@@ -50,6 +50,7 @@
 		{ id: 12, title: 'Task L', assigned: 'Adam', importance: 'High' }
 	];
 
+	let nextId = $state(13);
 	let tasks = shallowObservable(tasksData);
 	let numberOfTasks = $derived(tasks.value.length);
 </script>
@@ -57,8 +58,23 @@
 <h1 class="mb-5">Number of tasks {numberOfTasks}</h1>
 
 <div class="flex flex-col gap-3">
+	<button
+		onclick={() =>
+			tasks.value.push(
+				new NonReactiveObjectGenerator({
+					id: nextId++,
+					title: 'New task',
+					assigned: 'Adam',
+					importance: 'Low'
+				}) as Task
+			)}
+		class="border p-3">Add</button
+	>
 	{#each tasks.value as t, idx}
 		<div class="flex flex-row items-center gap-9">
+			<button onclick={() => tasks.value.splice(idx, 1)} class="border border-red-500 p-3">
+				Delete
+			</button>
 			<div class="flex flex-row items-center gap-2">
 				<span>{t.id + getCounter()}</span>
 				<button onclick={() => (t.id += 10)} class="border p-2">Update id</button>
