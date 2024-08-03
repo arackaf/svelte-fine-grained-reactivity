@@ -28,7 +28,6 @@
 				<span>{t.id + getCounter()}</span>
 				<button on:click={() => (t.id += 10)} class="border p-2">Update id</button>
 			</div>
-			<span>{t.id + getCounter()}</span>
 			<div class="flex flex-row items-center gap-2">
 				<span>{t.title + getCounter()}</span>
 				<button on:click={() => (t.title += 'X')} class="border p-2">Update title</button>
