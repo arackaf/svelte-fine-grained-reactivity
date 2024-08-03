@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { getCounter } from '$lib';
 
-	var tasks = [
+	let tasks = [
 		{ id: 1, title: 'Task A', assigned: 'Adam', importance: 'Low' },
 		{ id: 2, title: 'Task B', assigned: 'Adam', importance: 'Medium' },
 		{ id: 3, title: 'Task C', assigned: 'Adam', importance: 'High' },
