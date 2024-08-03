@@ -19,10 +19,6 @@
 		set value(newValue: T[]);
 	};
 
-	function cloneNonReactive<T>(data: T): T {
-		return new NonReactiveObjectGenerator(data) as T;
-	}
-
 	function shallowObservable<T>(data: T[]): ReactivePacket<T[]> {
 		let result = $state(data.map(t => new NonReactiveObjectGenerator(t) as T));
 		return {
@@ -33,6 +29,10 @@
 				result = newData;
 			}
 		};
+	}
+
+	function cloneNonReactive<T>(data: T): T {
+		return new NonReactiveObjectGenerator(data) as T;
 	}
 
 	const tasksData: Task[] = [
