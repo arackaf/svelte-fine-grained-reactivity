@@ -68,8 +68,10 @@
 					importance: 'Low'
 				}) as Task
 			)}
-		class="border p-3">Add</button
+		class="self-start border p-3"
 	>
+		Add new task
+	</button>
 	{#each tasks.value as t, idx}
 		<div class="flex flex-row items-center gap-9">
 			<button onclick={() => tasks.value.splice(idx, 1)} class="border border-red-500 p-3">
@@ -91,8 +93,9 @@
 				<span>{t.importance + getCounter()}</span>
 				<button
 					onclick={() => {
-						t.importance += 'X';
-						tasks.value[idx] = cloneNonReactive(t);
+						const taskClone = cloneNonReactive(t);
+						taskClone.importance += 'X';
+						tasks.value[idx] = cloneNonReactive(taskClone);
 					}}
 					class="border p-2">Update importance</button
 				>
