@@ -14,28 +14,16 @@
 		}
 	}
 
-	type ReactivePacket<T> = {
-		get value(): T;
-		set value(newValue: T[]);
-	};
-
-	function shallowObservable<T>(data: T[]): ReactivePacket<T[]> {
+	function shallowObservable<T>(data: T[]): T[] {
 		let result = $state(data.map(t => new NonReactiveObjectGenerator(t) as T));
-		return {
-			get value() {
-				return result;
-			},
-			set value(newData: T[]) {
-				result = newData;
-			}
-		};
+		return result;
 	}
 
 	function cloneNonReactive<T>(data: T): T {
 		return new NonReactiveObjectGenerator(data) as T;
 	}
 
-	const tasksData: Task[] = [
+	const getTasks = () => [
 		{ id: 1, title: 'Task A', assigned: 'Adam', importance: 'Low' },
 		{ id: 2, title: 'Task B', assigned: 'Adam', importance: 'Medium' },
 		{ id: 3, title: 'Task C', assigned: 'Adam', importance: 'High' },
@@ -51,16 +39,26 @@
 	];
 
 	let nextId = $state(13);
-	let tasks = shallowObservable(tasksData);
-	let numberOfTasks = $derived(tasks.value.length);
+	let tasks = shallowObservable(getTasks());
+	let numberOfTasks = $derived(tasks.length);
+
+	function clear() {
+		tasks.length = 0;
+	}
+
+	function reFill() {
+		tasks.push(...getTasks());
+	}
 </script>
 
 <h1 class="mb-5">Number of tasks {numberOfTasks}</h1>
 
 <div class="flex flex-col gap-3">
+	<button onclick={clear} class="self-start border p-3">Clear all </button>
+	<button onclick={reFill} class="self-start border p-3">Re-fill </button>
 	<button
 		onclick={() =>
-			tasks.value.push(
+			tasks.push(
 				new NonReactiveObjectGenerator({
 					id: nextId++,
 					title: 'New task',
@@ -72,9 +70,9 @@
 	>
 		Add new task
 	</button>
-	{#each tasks.value as t, idx}
+	{#each tasks as t, idx}
 		<div class="flex flex-row items-center gap-9">
-			<button onclick={() => tasks.value.splice(idx, 1)} class="border border-red-500 p-3">
+			<button onclick={() => tasks.splice(idx, 1)} class="border border-red-500 p-3">
 				Delete
 			</button>
 			<div class="flex flex-row items-center gap-2">
@@ -95,7 +93,7 @@
 					onclick={() => {
 						const taskClone = cloneNonReactive(t);
 						taskClone.importance += 'X';
-						tasks.value[idx] = cloneNonReactive(taskClone);
+						tasks[idx] = cloneNonReactive(taskClone);
 					}}
 					class="border p-2">Update importance</button
 				>
